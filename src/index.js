@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
@@ -11,21 +11,24 @@ import Recipes from "./components/Recipes";
 import "./styles.css";
 
 function App() {
-  const [recipes, setRecipes] = useState([]);
-  useEffect(() => {
-    console.log(recipes);
-  });
-  const getRecipes = async recipeName => {
-    setRecipes([...recipes, recipeName]);
+  const [recipeName, setRecipeName] = useState("");
+
+  const getRecipeName = recipe => {
+    setRecipeName(recipe);
   };
+
   return (
     <div className="App">
       <Header />
-      <Search getRecipes={getRecipes} />
+      <Search getRecipeName={getRecipeName} />
       <BrowserRouter>
         <Switch>
-          <Route path="/" render={() => <Recipes recipes={recipes} />} exact />
-          <Route path="/recipe/:id" component={Recipe} />
+          <Route
+            path="/"
+            render={() => <Recipes recipeName={recipeName} />}
+            exact
+          />
+          <Route path="/recipe/:id" render={props => <Recipe {...props} />} />
         </Switch>
       </BrowserRouter>
       <Footer />
